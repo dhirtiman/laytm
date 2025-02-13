@@ -3,6 +3,7 @@ import { z } from "zod";
 import { User, Account } from "../schemas/db.js";
 import jwt from "jsonwebtoken";
 import { auth } from "../middleware/middleware.js";
+import bcrypt from "bcrypt";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -99,6 +100,8 @@ userRouter.post("/signin", async (req, res) => {
   return res.status(200).json({
     msg: "successfully logged in",
     token,
+    firstName: user.firstName,
+    lastName: user.lastName,
   });
 });
 
@@ -132,6 +135,7 @@ userRouter.get("/bulk", auth, async (req, res) => {
 
   return res.status(200).json({
     users: users.map((user) => {
+      console.log(users);
       return {
         _id: user._id,
         firstName: user.firstName,

@@ -36,15 +36,26 @@ export default function SignIn() {
             password,
           };
           const API_URL = import.meta.env.VITE_API_URL || "bombobclit2"; // "http://localhost:3000/api/v1"
-          axios.post(`${API_URL}/user/signin`,user)
-          .then((response)=>{
-            localStorage.setItem('token',JSON.stringify(response.data.token))
-            localStorage.setItem('logged',JSON.stringify(true))
-            window.location.href = '/dashboard'
-          })
-          .catch((err)=>{
-            console.log(err)
-          })
+          axios
+            .post(`${API_URL}/user/signin`, user)
+            .then((response) => {
+              localStorage.setItem(
+                "token",
+                JSON.stringify(response.data.token)
+              );
+              localStorage.setItem(
+                "user",
+                JSON.stringify({
+                  firstName: response.data.firstName,
+                  lastName: response.data.lastName,
+                })
+              );
+              localStorage.setItem("logged", JSON.stringify(true));
+              window.location.href = "/dashboard";
+            })
+            .catch((err) => {
+              console.log(err);
+            });
         }}
       >
         Sign in
