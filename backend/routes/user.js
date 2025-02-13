@@ -28,11 +28,13 @@ const userRouter = express.Router();
 
 userRouter.post("/signup", async (req, res) => {
   const body = req.body;
+  
   const { success } = signupBody.safeParse(body);
 
   if (!success) {
     return res.status(411).json({
       message: "Incorrect inputs",
+      msg: signupBody.safeParse(body),
     });
   }
 
