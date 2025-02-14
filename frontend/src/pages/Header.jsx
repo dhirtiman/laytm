@@ -1,10 +1,8 @@
-
 export default function Header() {
   const logged = JSON.parse(localStorage.getItem("logged"));
-  const user = JSON.parse(localStorage.getItem('user')) || {}
+  const user = JSON.parse(localStorage.getItem("user")) || {};
 
-  const firstName = user.firstName
-
+  const firstName = user.firstName;
 
   const logOut = () => {
     localStorage.removeItem("logged");
@@ -13,23 +11,23 @@ export default function Header() {
     window.location.href = "/signin";
   };
 
-  
-  // use effect to retrive user data
-  
-
   return (
-    <header className=" w-full bg-slate-600 flex justify-between px-5">
-      {" "}
-      <h1>layTM</h1>{" "}
-      {logged ? (
-        <div>
-          {" "}
-          <p>welcome {firstName}</p>
-          <button onClick={logOut}>Log out</button>
+    <header className="w-full bg-slate-700 text-white flex justify-between items-center py-4 px-6 shadow-md">
+      {/* Branding */}
+      <h1 className="text-2xl font-bold">layTM</h1>
+
+      {/* Logged-in User Section */}
+      {logged && (
+        <div className="flex items-center gap-4">
+          <p className="text-lg">Welcome, <span className="font-semibold">{firstName}</span></p>
+          <button
+            onClick={logOut}
+            className="bg-red-500 hover:bg-red-600 transition text-white px-4 py-2 rounded-lg shadow"
+          >
+            Log out
+          </button>
         </div>
-      ) : (
-        ""
-      )}{" "}
+      )}
     </header>
   );
 }

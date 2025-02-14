@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 import axios from "axios";
+
+import Heading from "../components/Heading.jsx";
+import Button from "../components/Button.jsx";
+import InputBox from "../components/InputBox.jsx";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
@@ -9,85 +12,84 @@ export default function SignUp() {
   const [lastName, setLastname] = useState("");
   const [password, setPassword] = useState("");
 
-  const setUsernameInput = (e) => {
-    setUsername(e.target.value);
-    console.log(username);
-  };
-
   const signUp = async () => {
-    if (username == "" || firstName == "" || lastName == "" || password == "") {
-      console.log('incomplete inputs');
-      
-      return
+    if (!username || !firstName || !lastName || !password) {
+      console.log("Incomplete inputs");
+      return;
     }
 
-    const API_URL = import.meta.env.VITE_API_URL || "bombobclit"; //'http://localhost:3000/api/v1'
-    const user = {
-      username,
-      firstName,
-      lastName,
-      password,
-    };
+    const API_URL = import.meta.env.VITE_API_URL || "bombobclit";
+    const user = { username, firstName, lastName, password };
+
     console.log(API_URL, user);
 
     axios
-      .post(`${API_URL}/user/signup`, { ...user })
-      .then(function (response) {
-        console.log(response);
+      .post(`${API_URL}/user/signup`, user)
+      .then((response) => {
+        console.log(response)
+        window.location.href = "/signin";
       })
-      .catch(function (error) {
-        console.log(error);
-      });
+      .catch((error) => console.log(error));
   };
 
   return (
-    <div className=" ">
-      <h1>Sign up</h1>
-      <p>Enter your information to create an account</p>
-      <input
-        placeholder="firstName"
-        value={firstName}
-        onChange={(e) => {
-          setFirstname(e.target.value);
-        }}
-      ></input>
-      <br></br>
-      <input
-        placeholder="lastName"
-        value={lastName}
-        onChange={(e) => {
-          setLastname(e.target.value);
-        }}
-        onKeyUp={(e) => {
-          if (e.key == "enter") signUp;
-        }}
-      ></input>
-      <br></br>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+      {/* Card Container */}
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+        {/* Heading */}
+        <Heading>
+          Sign up
+        </Heading>
+        <p className="text-gray-600 text-center mb-6">
+          Enter your information to create an account
+        </p>
 
-      <input
-        placeholder="password"
-        value={password}
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-        onKeyUp={(e) => {
-          if (e.key == "enter") signUp;
-        }}
-      ></input>
-      <br></br>
+        {/* Form */}
+        <div className="space-y-4">
+          <InputBox
+            type="text"
+            placeholder="First Name"
+            value={firstName}
+            onChange={(e) => setFirstname(e.target.value)}
+          />
 
-      <input
-        placeholder="username"
-        value={username}
-        onChange={setUsernameInput}
-      ></input>
-      <br></br>
-      <button type="button" onClick={signUp}>
-        Sign up
-      </button>
+          <InputBox
+            type="text"
+            placeholder="Last Name"
+            value={lastName}
+            onChange={(e) => setLastname(e.target.value)}
+          />
 
-      <p>Already have an account?</p>
-      <Link to="/signin">click here</Link>
+          <InputBox
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+
+          <InputBox
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") signUp();
+            }}
+          />
+
+          <Button onClick={signUp} className="w-full">
+            Sign up
+          </Button>
+        </div>
+
+        {/* Footer */}
+        <p className="text-gray-600 text-center mt-4">
+          Already have an account?{" "}
+          <Link to="/signin" className="text-blue-500 hover:underline">
+            Click here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

@@ -29,7 +29,7 @@ const userRouter = express.Router();
 
 userRouter.post("/signup", async (req, res) => {
   const body = req.body;
-  
+
   const { success } = signupBody.safeParse(body);
 
   if (!success) {
@@ -134,8 +134,9 @@ userRouter.get("/bulk", auth, async (req, res) => {
   });
 
   return res.status(200).json({
-    users: users.map((user) => {
-      console.log(users);
+    users: users
+    .filter((user)=>user._id != req.userid)
+    .map((user) => {
       return {
         _id: user._id,
         firstName: user.firstName,
