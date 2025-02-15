@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Navigate } from "react-router-dom";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 
@@ -25,6 +25,16 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
+          <Route
+            path="*"
+            element={
+              JSON.parse(localStorage.getItem("logged")) ? (
+                <Navigate to="/dashboard" />
+              ) : (
+                <Navigate to="/signin" />
+              )
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>
