@@ -29,7 +29,6 @@ const userRouter = express.Router();
 
 userRouter.post("/signup", async (req, res) => {
   // artificial delay 
-  await new Promise((resolve) => setTimeout(resolve, 1500));
 
 
   const body = req.body;
@@ -71,7 +70,6 @@ userRouter.post("/signup", async (req, res) => {
 });
 
 userRouter.post("/signin", async (req, res) => {
-  await new Promise((resolve) => setTimeout(resolve, 1500));
 
   const body = req.body;
   const { success } = signinBody.safeParse(body);
