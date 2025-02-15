@@ -41,15 +41,13 @@ export default function Send({ modalClose, user, balance, updateBalance }) {
           Authorization: "Bearer " + token,
         },
       })
-      .then((response) => {
-        console.log(response.data);
-        setAmount(0);
+      .then(() => {
         loadingNo();
         updateBalance();
         modalClose();
       })
       .catch((error) => {
-        console.log(error);
+        setError(error.response.data.message);
         loadingNo();
       });
   };

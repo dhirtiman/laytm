@@ -32,12 +32,10 @@ export default function SignUp() {
     const API_URL = import.meta.env.VITE_API_URL || "bombobclit";
     const user = { username, firstName, lastName, password };
 
-    console.log(API_URL, user);
 
     axios
       .post(`${API_URL}/user/signup`, user)
-      .then((response) => {
-        console.log(response);
+      .then(() => {
         loadingNo();
         window.location.href = "/signin";
       })
