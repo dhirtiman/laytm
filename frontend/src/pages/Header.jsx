@@ -39,7 +39,7 @@ export default function Header() {
       /> : null}
       <header className="w-full bg-slate-700 text-white flex justify-between items-center py-4 px-6 shadow-md">
         {/* Branding */}
-        <h1 className="text-2xl font-bold">layTM</h1>
+        <h1 className="text-2xl font-bold">LayTM</h1>
 
         {/* Logged-in User Section */}
         {logged && (

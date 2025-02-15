@@ -9,7 +9,7 @@ export default function Button({ children, onClick, secondary }) {
     <button
       type="button"
       onClick={onClick}
-      className={"w-full mt-4 mx-4 p-2 rounded-lg "+classes}
+      className={"w-full mt-4 p-2 rounded-lg  "+classes}
     >
       {children}
     </button>

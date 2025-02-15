@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Send from "../components/Send.jsx";
 import Loading from "../components/Loading.jsx";
+import Warning from "./Warning.jsx";
 
 export default function UserList({ balance, updateBalance }) {
   const [users, setUsers] = useState([]);
@@ -11,6 +12,7 @@ export default function UserList({ balance, updateBalance }) {
   const [showModal, setShowModal] = useState(false);
   const [receiverUser, setReceiverUser] = useState({});
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const loadingYes = () => {
     setLoading(true);
@@ -19,9 +21,9 @@ export default function UserList({ balance, updateBalance }) {
     setLoading(false);
   };
 
-  useEffect(() => {    
+  useEffect(() => {
     if (filter == "") {
-      getUsers("", setUsers,loadingYes,loadingNo);
+      getUsers("", setUsers, loadingYes, loadingNo);
     }
     return;
   }, [filter]);
@@ -46,7 +48,11 @@ export default function UserList({ balance, updateBalance }) {
         />
       )}
 
-      <h2 className="text-xl font-bold text-gray-800 mb-4">Users</h2>
+      <div className=" flex justify-between pr-40">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Users </h2>
+        {error ? <Warning message={error} removeWarning={setError} /> : null}
+      </div>
+
       {/* Search Bar */}
       <div className="flex space-x-2 mb-4">
         <input
@@ -58,8 +64,11 @@ export default function UserList({ balance, updateBalance }) {
         />
         <button
           onClick={() => {
-            if (filter == "") return;
-            getUsers(filter, setUsers,loadingYes,loadingNo);
+            if (filter == "") {
+              setError("Enter a filter");
+              return;
+            }
+            getUsers(filter, setUsers, loadingYes, loadingNo);
           }}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
         >

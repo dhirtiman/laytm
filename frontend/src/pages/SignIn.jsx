@@ -6,11 +6,13 @@ import Heading from "../components/Heading";
 import Button from "../components/Button.jsx";
 import InputBox from "../components/InputBox.jsx";
 import Loading from "../components/Loading.jsx";
+import Warning from "../components/Warning.jsx";
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const loadingYes = () => {
     setLoading(true);
@@ -76,7 +78,8 @@ export default function SignIn() {
                   window.location.href = "/dashboard";
                 })
                 .catch((err) => {
-                  console.log(err);
+                  setError(err.response.data.message);
+                  loadingNo();
                 });
             }}
             className="w-full"
@@ -86,12 +89,15 @@ export default function SignIn() {
         </div>
 
         {/* Footer */}
-        <p className="text-gray-600 text-center mt-4">
-          Don&apos;t have an account?{" "}
-          <Link to="/signup" className="text-blue-500 hover:underline">
-            Create one
-          </Link>
-        </p>
+        <div>
+          <p className="text-gray-600 text-center mt-4">
+            Don&apos;t have an account?{" "}
+            <Link to="/signup" className="text-blue-500 hover:underline">
+              Create one
+            </Link>
+          </p>
+          {error ? <Warning message={error} removeWarning={setError} /> : null}
+        </div>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import Heading from "../components/Heading.jsx";
 import Button from "../components/Button.jsx";
 import InputBox from "../components/InputBox.jsx";
 import Loading from "../components/Loading.jsx";
+import Warning from "../components/Warning.jsx";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
@@ -13,6 +14,7 @@ export default function SignUp() {
   const [lastName, setLastname] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const loadingYes = () => {
     setLoading(true);
@@ -23,7 +25,7 @@ export default function SignUp() {
 
   const signUp = async () => {
     if (!username || !firstName || !lastName || !password) {
-      console.log("Incomplete inputs");
+      setError("Incomplete inputs");
       return;
     }
     loadingYes();
@@ -40,14 +42,14 @@ export default function SignUp() {
         window.location.href = "/signin";
       })
       .catch((error) => {
-        console.log(error);
+        setError(error.response.data.message);
         loadingNo();
       });
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-    {loading ? <Loading/> : null}
+      {loading ? <Loading /> : null}
       {/* Card Container */}
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         {/* Heading */}
@@ -95,12 +97,15 @@ export default function SignUp() {
         </div>
 
         {/* Footer */}
-        <p className="text-gray-600 text-center mt-4">
-          Already have an account?{" "}
-          <Link to="/signin" className="text-blue-500 hover:underline">
-            Click here
-          </Link>
-        </p>
+        <div className="">
+          <p className="text-gray-600 text-center mt-4">
+            Already have an account?{" "}
+            <Link to="/signin" className="text-blue-500 hover:underline">
+              Click here
+            </Link>
+          </p>
+          {error ? <Warning message={error} removeWarning={setError} /> : null}
+        </div>
       </div>
     </div>
   );

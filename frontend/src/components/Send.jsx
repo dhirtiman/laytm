@@ -4,14 +4,16 @@ import ReactDOM from "react-dom";
 
 import Button from "../components/Button.jsx";
 import Loading from "../components/Loading.jsx";
+import Warning from "../components/Warning.jsx";
 
 const toCent = (n) => {
   return (n * 100).toFixed(0);
 };
 
 export default function Send({ modalClose, user, balance, updateBalance }) {
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const loadingYes = () => {
     setLoading(true);
@@ -21,6 +23,10 @@ export default function Send({ modalClose, user, balance, updateBalance }) {
   };
 
   const transfer = async () => {
+    if (amount == 0 || amount == null) {
+      setError("Enter a valid amount");
+      return;
+    }
     loadingYes();
     const API_URL = import.meta.env.VITE_API_URL;
     const token = JSON.parse(localStorage.getItem("token"));
@@ -65,7 +71,7 @@ export default function Send({ modalClose, user, balance, updateBalance }) {
             </button>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 flex flex-col">
             <p className="text-lg font-semibold text-gray-700">
               Your balance: <span className="text-green-600">₹{balance}</span>
             </p>
@@ -82,12 +88,11 @@ export default function Send({ modalClose, user, balance, updateBalance }) {
               placeholder="Enter Amount"
               className="w-full mt-3 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
-            <Button
-              onClick={transfer}
-              className="w-full bg-blue-500 text-white mt-4 p-2 rounded-lg hover:bg-blue-600 transition"
-            >
-              Send
-            </Button>
+            {error ? (
+              <Warning message={error} removeWarning={setError} />
+            ) : null}
+
+            <Button onClick={transfer}>Send</Button>
           </div>
         </div>
       </div>
