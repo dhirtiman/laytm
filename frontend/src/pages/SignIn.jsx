@@ -5,14 +5,24 @@ import { Link } from "react-router-dom";
 import Heading from "../components/Heading";
 import Button from "../components/Button.jsx";
 import InputBox from "../components/InputBox.jsx";
-
+import Loading from "../components/Loading.jsx";
 
 export default function SignIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const loadingYes = () => {
+    setLoading(true);
+  };
+  const loadingNo = () => {
+    setLoading(false);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+      {loading ? <Loading /> : null}
+
       {/* Card Container */}
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         {/* Heading */}
@@ -41,21 +51,28 @@ export default function SignIn() {
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
           />
 
-          <Button 
+          <Button
             onClick={async () => {
-              console.log("Signing in...");
+              loadingYes();
               const user = { username, password };
               const API_URL = import.meta.env.VITE_API_URL || "bombobclit2";
 
               axios
                 .post(`${API_URL}/user/signin`, user)
                 .then((response) => {
-                  localStorage.setItem("token", JSON.stringify(response.data.token));
-                  localStorage.setItem("user", JSON.stringify({
-                    firstName: response.data.firstName,
-                    lastName: response.data.lastName,
-                  }));
+                  localStorage.setItem(
+                    "token",
+                    JSON.stringify(response.data.token)
+                  );
+                  localStorage.setItem(
+                    "user",
+                    JSON.stringify({
+                      firstName: response.data.firstName,
+                      lastName: response.data.lastName,
+                    })
+                  );
                   localStorage.setItem("logged", JSON.stringify(true));
+                  loadingNo();
                   window.location.href = "/dashboard";
                 })
                 .catch((err) => {

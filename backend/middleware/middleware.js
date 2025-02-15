@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET;
 
 const auth = async (req, res, next) => {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   const header = req.headers.authorization;
 
   if (!header) {

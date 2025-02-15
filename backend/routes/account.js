@@ -5,6 +5,10 @@ import { startSession } from "mongoose";
 
 const accountRouter = express.Router();
 
+const toDecimal = (n) => {
+  return (n / 100).toFixed(2);
+};
+
 accountRouter.get("/balance", auth, (req, res) => {
   const userid = req.userid;
   Account.findOne({
@@ -12,7 +16,7 @@ accountRouter.get("/balance", auth, (req, res) => {
   })
     .then((account) => {
       res.status(200).json({
-        balance: account.balance,
+        balance: toDecimal(account.balance),
       });
     })
     .catch((err) => {
@@ -56,7 +60,6 @@ accountRouter.post("/transfer", auth, async (req, res) => {
       to: to,
     });
   }
- 
 
   await Account.updateOne({ userid }, { $inc: { balance: -amount } }).session(
     session
@@ -70,12 +73,10 @@ accountRouter.post("/transfer", auth, async (req, res) => {
 
   return res.status(200).json({
     message: "Transfer successful",
-    amount: amount,
+    amount: toDecimal(amount),
     to: to,
     from: userid,
   });
 });
 
 export default accountRouter;
-
-

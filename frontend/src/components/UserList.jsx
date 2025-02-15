@@ -3,16 +3,25 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Send from "../components/Send.jsx";
+import Loading from "../components/Loading.jsx";
 
 export default function UserList({ balance, updateBalance }) {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [receiverUser, setReceiverUser] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+  const loadingYes = () => {
+    setLoading(true);
+  };
+  const loadingNo = () => {
+    setLoading(false);
+  };
+
+  useEffect(() => {    
     if (filter == "") {
-      getUsers("", setUsers);
+      getUsers("", setUsers,loadingYes,loadingNo);
     }
     return;
   }, [filter]);
@@ -27,6 +36,7 @@ export default function UserList({ balance, updateBalance }) {
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg w-full">
+      {loading ? <Loading /> : null}
       {showModal && (
         <Send
           modalClose={modalClose}
@@ -47,7 +57,10 @@ export default function UserList({ balance, updateBalance }) {
           onChange={(e) => setFilter(e.target.value)}
         />
         <button
-          onClick={() => getUsers(filter, setUsers)}
+          onClick={() => {
+            if (filter == "") return;
+            getUsers(filter, setUsers,loadingYes,loadingNo);
+          }}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
         >
           Search
@@ -77,7 +90,8 @@ export default function UserList({ balance, updateBalance }) {
   );
 }
 
-const getUsers = async (filter, setUsers) => {
+const getUsers = async (filter, setUsers, loadingYes, loadingNo) => {
+  loadingYes();
   const API_URL = import.meta.env.VITE_API_URL;
   const token = JSON.parse(localStorage.getItem("token"));
 
@@ -88,8 +102,10 @@ const getUsers = async (filter, setUsers) => {
       },
       params: { filter },
     });
+    loadingNo();
     setUsers(response.data.users);
   } catch (error) {
     console.error("Error fetching users:", error);
+    loadingNo();
   }
 };

@@ -3,32 +3,55 @@ import axios from "axios";
 import ReactDOM from "react-dom";
 
 import Button from "../components/Button.jsx";
+import Loading from "../components/Loading.jsx";
+
+const toCent = (n) => {
+  return (n * 100).toFixed(0);
+};
 
 export default function Send({ modalClose, user, balance, updateBalance }) {
   const [amount, setAmount] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const loadingYes = () => {
+    setLoading(true);
+  };
+  const loadingNo = () => {
+    setLoading(false);
+  };
 
   const transfer = async () => {
+    loadingYes();
     const API_URL = import.meta.env.VITE_API_URL;
     const token = JSON.parse(localStorage.getItem("token"));
-
     const body = {
       to: user._id,
-      amount,
+      amount: toCent(amount),
     };
 
-    const response = await axios.post(`${API_URL}/account/transfer`, body, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-
-    console.log(response);
-    updateBalance();
+    axios
+      .post(`${API_URL}/account/transfer`, body, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        setAmount(0);
+        loadingNo();
+        updateBalance();
+        modalClose();
+      })
+      .catch((error) => {
+        console.log(error);
+        loadingNo();
+      });
   };
 
   return ReactDOM.createPortal(
     <>
       <div className="fixed inset-0 bg-black opacity-50 z-10"></div>
+      {loading ? <Loading /> : null}
 
       <div className="fixed inset-0 flex items-center justify-center z-20">
         <div className="bg-white rounded-lg shadow-lg p-6 w-96">
@@ -43,11 +66,14 @@ export default function Send({ modalClose, user, balance, updateBalance }) {
           </div>
 
           <div className="mt-4">
-          <p className="text-lg font-semibold text-gray-700">
-          Your balance: <span className="text-green-600">₹{balance}</span>
-        </p>
+            <p className="text-lg font-semibold text-gray-700">
+              Your balance: <span className="text-green-600">₹{balance}</span>
+            </p>
             <h3 className="text-lg text-gray-700 font-medium">
-              Send Money to: <span className="text-red-600">{user.firstName} {user.lastName} </span>
+              Send Money to:{" "}
+              <span className="text-red-600">
+                {user.firstName} {user.lastName}{" "}
+              </span>
             </h3>
             <input
               value={amount}
