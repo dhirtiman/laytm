@@ -1,5 +1,5 @@
 
-# **LayTM**  
+# **LayTM**   [![wakatime](https://wakatime.com/badge/user/80b5c61e-9eb3-4a4b-a6bc-1ac89c91f141/project/ee74a0cf-eca1-4433-8edb-e8081b234f96.svg)](https://wakatime.com/badge/user/80b5c61e-9eb3-4a4b-a6bc-1ac89c91f141/project/ee74a0cf-eca1-4433-8edb-e8081b234f96)
 A **basic payment system** built with modern web technologies.  
 
 ## 🚀 **Technologies Used**  
