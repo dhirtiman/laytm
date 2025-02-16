@@ -1,17 +1,17 @@
+import axios from "axios";
 import Dialog from "../components/Dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const [showDialog, setShowDialog] = useState(false);
 
-
-  const showDialogYes =()=>{
+  const showDialogYes = () => {
     setShowDialog(true);
-  }
+  };
 
-  const showDialogNo =()=>{
+  const showDialogNo = () => {
     setShowDialog(false);
-  }
+  };
 
   const logged = JSON.parse(localStorage.getItem("logged"));
   const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -25,18 +25,33 @@ export default function Header() {
     window.location.href = "/signin";
   };
 
+  useEffect(() => {
+    // wake server
+    const API_URL = import.meta.env.VITE_API_URL || "bombobclit2";
+    axios
+      .get(`${API_URL}/user/wake`, {})
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <>
-      {showDialog? <Dialog
-        title="Log out"
-        description="Are you sure you want to log out?"
-        dialogClose={() => showDialogNo()}
-        yes={() => {
-          logOut();
-          showDialogNo()
-        }}
-        no={() => showDialogNo()}
-      /> : null}
+      {showDialog ? (
+        <Dialog
+          title="Log out"
+          description="Are you sure you want to log out?"
+          dialogClose={() => showDialogNo()}
+          yes={() => {
+            logOut();
+            showDialogNo();
+          }}
+          no={() => showDialogNo()}
+        />
+      ) : null}
       <header className="w-full bg-slate-700 text-white flex justify-between items-center py-4 px-6 shadow-md">
         {/* Branding */}
         <h1 className="text-2xl font-bold">LayTM</h1>

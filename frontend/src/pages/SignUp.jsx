@@ -15,6 +15,8 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 
   const loadingYes = () => {
     setLoading(true);
@@ -26,6 +28,14 @@ export default function SignUp() {
   const signUp = async () => {
     if (!username || !firstName || !lastName || !password) {
       setError("Incomplete inputs");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+    if (!emailRegex.test(username)) {
+      setError("Invalid email");
       return;
     }
     loadingYes();
@@ -73,7 +83,7 @@ export default function SignUp() {
           />
 
           <InputBox
-            type="text"
+            type="email"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}

@@ -150,9 +150,9 @@ userRouter.get("/bulk", auth, async (req, res) => {
   });
 });
 
-userRouter.get("/protected", auth, async (req, res) => {
+userRouter.get("/wake",  async (req, res) => {
   return res.status(200).json({
-    msg: "hello from protected route",
+    msg: "hello, the server wake up",
   });
 });
 

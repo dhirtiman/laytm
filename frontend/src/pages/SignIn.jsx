@@ -38,7 +38,7 @@ export default function SignIn() {
         {/* Form */}
         <div className="space-y-4">
           <InputBox
-            type="text"
+            type="email"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -55,6 +55,10 @@ export default function SignIn() {
 
           <Button
             onClick={async () => {
+              if (username === "" || password === "") {
+                setError("Please fill all the fields");
+                return;
+              }
               loadingYes();
               const user = { username, password };
               const API_URL = import.meta.env.VITE_API_URL || "bombobclit2";
