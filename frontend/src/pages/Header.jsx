@@ -1,6 +1,6 @@
-import axios from "axios";
+
 import Dialog from "../components/Dialog";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 export default function Header() {
   const [showDialog, setShowDialog] = useState(false);
@@ -25,18 +25,7 @@ export default function Header() {
     window.location.href = "/signin";
   };
 
-  useEffect(() => {
-    // wake server
-    const API_URL = import.meta.env.VITE_API_URL || "bombobclit2";
-    axios
-      .get(`${API_URL}/user/wake`, {})
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  
 
   return (
     <>
