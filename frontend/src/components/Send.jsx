@@ -48,6 +48,8 @@ export default function Send({ modalClose, user, balance, updateBalance }) {
       })
       .catch((error) => {
         setError(error.response.data.message);
+        console.log(error.response.data.message);
+        
         loadingNo();
       });
   };

@@ -1,7 +1,7 @@
 import express from "express";
-import { Account } from "../schemas/db.js";
+import { Account, Txn } from "../schemas/db.js";
 import { auth } from "../middleware/middleware.js";
-import { startSession } from "mongoose";
+import mongoose, { startSession } from "mongoose";
 
 const accountRouter = express.Router();
 
@@ -41,14 +41,14 @@ accountRouter.post("/transfer", auth, async (req, res) => {
   if (!account) {
     session.abortTransaction();
     return res.status(403).json({
-      messsage: "Your Account not found",
+      message: "Your Account not found",
     });
   }
 
   if (account.balance < amount) {
     session.abortTransaction();
     return res.status(403).json({
-      messsage: "Insufficient balance",
+      message: "Insufficient balance",
     });
   }
   const toAccount = await Account.findOne({ userid: to }).session(session);
@@ -56,7 +56,7 @@ accountRouter.post("/transfer", auth, async (req, res) => {
   if (!toAccount) {
     session.abortTransaction();
     return res.status(403).json({
-      messsage: "Invalid reciever Account",
+      message: "Invalid reciever Account",
       to: to,
     });
   }
@@ -69,6 +69,17 @@ accountRouter.post("/transfer", auth, async (req, res) => {
     { $inc: { balance: amount } }
   ).session(session);
 
+  await Txn.create(
+    [
+      {
+        to: to,
+        from: userid,
+        amount: amount,
+      },
+    ],
+    { session }
+  );
+
   session.commitTransaction();
 
   return res.status(200).json({
@@ -77,6 +88,33 @@ accountRouter.post("/transfer", auth, async (req, res) => {
     to: to,
     from: userid,
   });
+});
+
+accountRouter.get("/txns", auth, async (req, res) => {
+  const userid = req.userid;
+  const userIdObject = mongoose.Types.ObjectId(userid);
+
+  try {
+    const txns = await Txn.find({
+      $or: [{ to: userIdObject }, { from: userIdObject }],
+    }).limit(10);
+    return res.status(200).json({
+      txns: txns.map((txn) => {
+        return {
+          to: txn.to,
+          from: txn.from,
+          amount: toDecimal(txn.amount),
+          date: txn.date,
+        };
+      }),
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(411).json({
+      message: "Error while fetching txns",
+      err,
+    });
+  }
 });
 
 export default accountRouter;
