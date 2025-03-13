@@ -1,8 +1,7 @@
 import { lazy, useEffect } from "react";
 import axios from "axios";
-import { BrowserRouter, Navigate } from "react-router-dom";
-import { Routes } from "react-router-dom";
-import { Route } from "react-router-dom";
+import { Route, Routes, BrowserRouter, Navigate } from "react-router-dom";
+import { RecoilRoot } from "recoil";
 
 import SignUp from "./pages/SignUp.jsx";
 import SignIn from "./pages/SignIn.jsx";
@@ -36,25 +35,27 @@ function App() {
     <div>
       <Header></Header>
       <BrowserRouter>
-        <Routes>
-          <Route element={<NotProtectedRoutes />}>
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-          </Route>
-          <Route element={<ProtectedRoutes />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Route>
-          <Route
-            path="*"
-            element={
-              JSON.parse(localStorage.getItem("logged")) ? (
-                <Navigate to="/dashboard" />
-              ) : (
-                <Navigate to="/signin" />
-              )
-            }
-          />
-        </Routes>
+        <RecoilRoot>
+          <Routes>
+            <Route element={<NotProtectedRoutes />}>
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/signin" element={<SignIn />} />
+            </Route>
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
+            <Route
+              path="*"
+              element={
+                JSON.parse(localStorage.getItem("logged")) ? (
+                  <Navigate to="/dashboard" />
+                ) : (
+                  <Navigate to="/signin" />
+                )
+              }
+            />
+          </Routes>
+        </RecoilRoot>
       </BrowserRouter>
     </div>
   );

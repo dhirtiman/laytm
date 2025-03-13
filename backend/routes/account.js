@@ -92,7 +92,7 @@ accountRouter.post("/transfer", auth, async (req, res) => {
 
 accountRouter.get("/txns", auth, async (req, res) => {
   const userid = req.userid;
-  const userIdObject = mongoose.Types.ObjectId(userid);
+  const userIdObject = new mongoose.Types.ObjectId(userid);
 
   try {
     const txns = await Txn.find({
@@ -101,6 +101,7 @@ accountRouter.get("/txns", auth, async (req, res) => {
     return res.status(200).json({
       txns: txns.map((txn) => {
         return {
+          _id: txn._id,
           to: txn.to,
           from: txn.from,
           amount: toDecimal(txn.amount),

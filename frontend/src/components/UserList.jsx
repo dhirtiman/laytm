@@ -2,12 +2,17 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRecoilState } from "recoil";
+
+import {usersAtom} from "../store/atoms/usersAtom.js";
+
 import Send from "../components/Send.jsx";
 import Loading from "../components/Loading.jsx";
 import Warning from "./Warning.jsx";
 
 export default function UserList({ balance, updateBalance }) {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useRecoilState(usersAtom);
+
   const [filter, setFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [receiverUser, setReceiverUser] = useState({});
@@ -26,7 +31,7 @@ export default function UserList({ balance, updateBalance }) {
       getUsers("", setUsers, loadingYes, loadingNo);
     }
     return;
-  }, [filter]);
+  }, [filter, setUsers]);
 
   const modalOpen = (user) => {
     setReceiverUser(user);
@@ -37,7 +42,7 @@ export default function UserList({ balance, updateBalance }) {
   };
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-lg w-full">
+    <div className="rounded-lg bg-white p-6 shadow-md ">
       {loading ? <Loading /> : null}
       {showModal && (
         <Send
@@ -48,15 +53,15 @@ export default function UserList({ balance, updateBalance }) {
         />
       )}
 
-      <div className=" flex justify-between pr-40">
-        <h2 className="text-xl font-bold text-gray-800 mb-4">Users </h2>
+      <div className="flex justify-between pr-40">
+        <h2 className="mb-4 text-xl font-bold text-gray-800">Users </h2>
         {error ? <Warning message={error} removeWarning={setError} /> : null}
       </div>
 
       {/* Search Bar */}
-      <div className="flex space-x-2 mb-4">
+      <div className="mb-4 flex space-x-2">
         <input
-          className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full rounded-lg border border-gray-300 p-2 focus:ring-2 focus:ring-blue-400 focus:outline-none"
           type="text"
           placeholder="Search users"
           value={filter}
@@ -70,7 +75,7 @@ export default function UserList({ balance, updateBalance }) {
             }
             getUsers(filter, setUsers, loadingYes, loadingNo);
           }}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+          className="rounded-lg bg-blue-500 px-4 py-2 text-white transition hover:bg-blue-600"
         >
           Search
         </button>
@@ -80,7 +85,7 @@ export default function UserList({ balance, updateBalance }) {
       <ul className="space-y-3">
         {users.map((user) => (
           <li
-            className="flex justify-between items-center p-3 bg-gray-50 rounded-lg shadow"
+            className="flex items-center justify-between rounded-lg bg-gray-50 p-3 shadow"
             key={user._id}
           >
             <h3 className="text-gray-700">
@@ -88,7 +93,7 @@ export default function UserList({ balance, updateBalance }) {
             </h3>
             <button
               onClick={() => modalOpen(user)}
-              className="px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+              className="rounded-lg bg-green-500 px-3 py-2 text-white transition hover:bg-green-600"
             >
               Send Money
             </button>
