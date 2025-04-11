@@ -1,5 +1,4 @@
 import ReactDOM from "react-dom";
-
 import Button from "./Button.jsx";
 
 export default function Dialog({ title, description, dialogClose, yes, no }) {
@@ -39,4 +38,4 @@ export default function Dialog({ title, description, dialogClose, yes, no }) {
     </>,
     document.body
   );
-}
+} 

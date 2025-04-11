@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import UserList from "../components/UserList";
-import TxnList from "../components/TxnList";
-import RefreshButton from "../components/RefreshButton";
+import UserList from "../components/users/UserList";
+import TxnList from "../components/transactions/TxnList";
+import RefreshButton from "../components/ui/RefreshButton";
 
 export default function Dashboard() {
   const [balance, setBalance] = useState(0);

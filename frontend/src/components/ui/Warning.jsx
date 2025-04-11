@@ -13,4 +13,4 @@ export default function Warning({ message, removeWarning }) {
       <p>{message}</p>
     </div>
   );
-}
+} 

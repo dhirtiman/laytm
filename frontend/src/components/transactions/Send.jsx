@@ -2,9 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import ReactDOM from "react-dom";
 
-import Button from "../components/Button.jsx";
-import Loading from "../components/Loading.jsx";
-import Warning from "../components/Warning.jsx";
+import Button from "../ui/Button.jsx";
+import Loading from "../ui/Loading.jsx";
+import Warning from "../ui/Warning.jsx";
 
 const toCent = (n) => {
   return (n * 100).toFixed(0);
@@ -99,4 +99,4 @@ export default function Send({ modalClose, user, balance, updateBalance }) {
     </>,
     document.body
   );
-}
+} 

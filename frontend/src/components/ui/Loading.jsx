@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 
-export default function Dialog() {
+export default function Loading() {
   return ReactDOM.createPortal(
     <>
       <div className="flex flex-col justify-center fixed inset-0 bg-black opacity-30 z-30">
@@ -29,4 +29,4 @@ export default function Dialog() {
     </>,
     document.body
   );
-}
+} 

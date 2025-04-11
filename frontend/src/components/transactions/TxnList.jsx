@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useRecoilValueLoadable } from "recoil";
-import { usersAtom } from "../store/atoms/usersAtom";
+import { usersAtom } from "../../store/atoms/usersAtom";
 import axios from "axios";
-
-import RefreshButton from "./RefreshButton.jsx"
+import RefreshButton from "../ui/RefreshButton.jsx";
 
 export default function TxnList() {
   const [txns, setTxns] = useState([]);
@@ -58,16 +57,9 @@ export default function TxnList() {
 
 const formatDate = (date) => {
   return date.toLocaleDateString("en-US", {
-    // year: "numeric", // "2025"
-    month: "short", // "February"
-    day: "numeric", // "18"
+    month: "short",
+    day: "numeric",
   });
-  //  +
-  // " at " +
-  // date.toLocaleTimeString("en-US", {
-  //   hour: "2-digit",
-  //   minute: "2-digit",
-  // })
 };
 
 const getTxns = async (setTxns) => {
@@ -83,6 +75,5 @@ const getTxns = async (setTxns) => {
     setTxns(response.data.txns);
   } catch (error) {
     console.error("Error fetching users:", error);
-    // loadingNo();
   }
-};
+}; 

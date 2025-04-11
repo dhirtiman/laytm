@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 
-import {usersAtom} from "../store/atoms/usersAtom.js";
+import {usersAtom} from "../../store/atoms/usersAtom.js";
 
-import Send from "../components/Send.jsx";
-import Loading from "../components/Loading.jsx";
-import Warning from "./Warning.jsx";
+import Send from "../transactions/Send.jsx";
+import Loading from "../ui/Loading.jsx";
+import Warning from "../ui/Warning.jsx";
 
 export default function UserList({ balance, updateBalance }) {
   const [users, setUsers] = useRecoilState(usersAtom);
@@ -122,4 +122,4 @@ const getUsers = async (filter, setUsers, loadingYes, loadingNo) => {
     console.error("Error fetching users:", error);
     loadingNo();
   }
-};
+}; 

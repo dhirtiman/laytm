@@ -2,11 +2,11 @@ import axios from "axios";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import Heading from "../components/Heading";
-import Button from "../components/Button.jsx";
-import InputBox from "../components/InputBox.jsx";
-import Loading from "../components/Loading.jsx";
-import Warning from "../components/Warning.jsx";
+import Heading from "../components/ui/Heading.jsx";
+import Button from "../components/ui/Button.jsx";
+import InputBox from "../components/ui/InputBox.jsx";
+import Loading from "../components/ui/Loading.jsx";
+import Warning from "../components/ui/Warning.jsx";
 
 export default function SignIn() {
   const [username, setUsername] = useState("");

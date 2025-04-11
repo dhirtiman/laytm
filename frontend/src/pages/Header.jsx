@@ -1,5 +1,4 @@
-
-import Dialog from "../components/Dialog";
+import Dialog from "../components/ui/Dialog.jsx";
 import {  useState } from "react";
 
 export default function Header() {
